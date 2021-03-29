@@ -3,18 +3,40 @@
 #
 # shotgun should NOT be installed, just grab its 'api' (directory of scripts)
 # 
-# dependencies - download/make these in a dir called 'sg':
-# ./sendittoshotgun.py					: this script
-# ./res/python/shotgun_api3				: shotgun api (as of 2018)
-# ./res/ffmpeg/bin						: ffmpeg binaries and resources (can be overridden)
+# dependencies - download/make these in a dir called 'sg'
+# ./sendittoshotgun.py			: this script
+# ./res/python/shotgun_api3		: shotgun api (as of 2018)
+# ./res/ffmpeg/bin			: ffmpeg binaries and resources (can be overridden)
 # ./res/icons/your_48x48_watermark.png	: watermark for lower right of movies (can be overridden)
-# ./res/fonts/EnvyCode-R.ttf			: font for overlay (can be overridden)
+# ./res/fonts/EnvyCode-R.ttf		: font for overlay (can be overridden)
 # 
-# usage:
-# python3 sendittoshotgun.py "projectname" "sequencename" "shotname" "taskname" "versionname" "username" "fullimagepath" "comment" "fps"
+# usage
+# python sendittoshotgun.py "projectname" "sequencename" "shotname" "taskname" "versionname" "username" "fullimagepath" "comment" "fps"
 #
 # build this command in a nuke or houdini shelftool, select read-nodes or file-cops, hit the button, keep working...
-# sample shelftool should be where you found this script
+# a sample shelftool should be where you found this script
+#
+# minimal dir compliance 
+# /skullet/GX1/intro/2/anim/then/whatever/the/hell/you/like
+#           |     |  |   |
+#           |     |  |   +--- taskname
+#           |     |  +------- shotname
+#           |     +---------- sequencename
+#           +---------------- projectname
+#
+# arg sources - there should be ZERO data entry - its the whole point of this excercise
+# [01] # projectname.............. get from path of file
+# [02] # username................. get from OS, must match shotgun username!
+# [03] # sequencename............. get from path of file
+# [04] # shotname................. get from path of file
+# [05] # taskname................. get from path of file
+# [06] # versionname.............. required, can be anything, build automatically, dont' ask user
+# [07] # versioncomment (optional) can be anything, build automatically, don't ask user by default; make a special shelftool for special people
+# [08] # 1stframeofrender......... get from 1st frame of sequence
+# [09] # pathtoshotgunapi......... from shotgun_api3 import shotgun
+# [10] # pathtoffmpeg............. optional ffmpeg override, eg: /server/tools/ffmpeg/bin/
+# [11] # pathtowatermark.......... optional watermark override, must be a .png with alpha
+# [12] # pathtofont............... optional watermark font override, must be ttf, used for shot info overlay strip
 #
 # the srcipt and dependencies are encapsulated within one dir, so it can be copied and used offsite
 # to save xfer size, have offsite peeps install python and ffmpeg locally, however this may introduce errors, especially with ffmpeg
@@ -244,8 +266,8 @@ if sg != None :
 									sg.upload_thumbnail("Version", vid, r)
 									sg.upload("Version", vid,reviewvid,'sg_uploaded_movie')
 								else : print "error: couldn't create new version: %s" % vn
-							else : print "error: ccan't find task: %s" % tn
-						else : print "error: ccan't find shot: %s" % sn
+							else : print "error: can't find task: %s" % tn
+						else : print "error: can't find shot: %s" % sn
 					else : print "error: can't find sequence: %s" % qn
 				else : print "error: user %s isn't in shotgun" % un
 			else : print "error: can't find project: %s" % pn
